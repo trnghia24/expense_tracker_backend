@@ -1,53 +1,66 @@
 package com.expense_tracker.expense_tracker_backend.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Date;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.GenericGenerator;
+
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
+@Table(name="expenses")
+@Data
+@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class Expense {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID id;
-    private Date date;
+    @NonNull
+    private LocalDate date;
+    @NonNull
     private String expenseName;
+    @NonNull
     private Double amount;
+    @NonNull
+    @ManyToOne(optional = false)
+    private User user;
 
-    public Expense() {
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getExpenseName() {
-        return expenseName;
-    }
-
-    public void setExpenseName(String expenseName) {
-        this.expenseName = expenseName;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
+//    public UUID getId() {
+//        return id;
+//    }
+//
+//    public void setId(UUID id) {
+//        this.id = id;
+//    }
+//
+//    public LocalDate getDate() {
+//        return date;
+//    }
+//
+//    public void setDate(LocalDate date) {
+//        this.date = date;
+//    }
+//
+//    public String getExpenseName() {
+//        return expenseName;
+//    }
+//
+//    public void setExpenseName(String expenseName) {
+//        this.expenseName = expenseName;
+//    }
+//
+//    public Double getAmount() {
+//        return amount;
+//    }
+//
+//    public void setAmount(Double amount) {
+//        this.amount = amount;
+//    }
 }
