@@ -1,4 +1,4 @@
-package com.expense_tracker.expense_tracker_backend.controllers;
+package com.expense_tracker.expense_tracker_backend.controllers.auth;
 
 import com.expense_tracker.expense_tracker_backend.services.auth.AuthenticationService;
 import com.expense_tracker.expense_tracker_backend.types.auth.AuthenticationRequest;
@@ -6,13 +6,11 @@ import com.expense_tracker.expense_tracker_backend.types.auth.AuthenticationResp
 import com.expense_tracker.expense_tracker_backend.types.auth.RegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@CrossOrigin
 public class AuthController {
     @Autowired
     private AuthenticationService authenticationService;
@@ -25,10 +23,15 @@ public class AuthController {
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
+    public ResponseEntity<?> authenticate (
             @RequestBody AuthenticationRequest request
-    ) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+    ) throws Exception {
+        try {
+            AuthenticationResponse response = authenticationService.authenticate(request);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
 }
