@@ -9,18 +9,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/expense")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000/", allowCredentials = "true")
 public class ExpenseController {
     @Autowired
     private ExpenseService expenseService;
 
     @PostMapping("/add")
     public ResponseEntity<?> add(@AuthenticationPrincipal User user, @RequestBody AddExpenseRequest request) {
-        Expense expense = new Expense(request.getDate(), request.getExpenseName(), request.getAmount(), user);
+        Expense expense = new Expense(Instant.ofEpochMilli(request.getDate()).atZone(ZoneId.systemDefault()).toLocalDate(), request.getExpenseName(), request.getAmount(), user);
         return ResponseEntity.ok(expenseService.saveExpense(expense));
     }
 
